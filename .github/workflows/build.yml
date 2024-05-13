@@ -93,7 +93,7 @@ jobs:
         cp pdfium/pdfium/out/Default/obj/pdfium.lib .
         #export PDFIUM_STATIC_LIB_PATH="${PWD}/pdfium/pdfium/out/Default/obj"
         file pdfium.lib
-        export PDFIUM_STATIC_LIB_PATH="."
+        export PDFIUM_STATIC_LIB_PATH="${PWD}"
         cargo build -vvv
         cargo run
       shell: bash
