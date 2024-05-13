@@ -1,20 +1,8 @@
-#!/usr/bin/env bash
-mkdir -p pdfium
-cd pdfium
-
-# Clone depot tools, standard tools used for building Chromium and associated projects.
-git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-export PATH="$PATH:$(cd depot_tools; pwd)"
-
-# Clone the pdfium source.
-gclient config --unmanaged https://pdfium.googlesource.com/pdfium.git
-gclient sync --no-history
-
 # Create default build configuration...
-cd pdfium
+cd pdfium/pdfium
 #./build/install-build-deps.sh --no-prompt
-rm out/Default/args.gn
-gn gen out/Default
+#rm out/Default/args.gn
+#gn gen out/Default
 
 # ... and now customise it as needed.
 echo "use_goma = false" >> out/Default/args.gn
@@ -31,6 +19,3 @@ echo "use_custom_libcxx = false" >> out/Default/args.gn
 #echo "target_cpu = \"x64\"" >> out/Default/args.gn
 #echo "target_os = \"linux\"" >> out/Default/args.gn
 #echo "is_debug = false" >> out/Default/args.gn
-
-# Run the build.
-ninja -C out/Default pdfium

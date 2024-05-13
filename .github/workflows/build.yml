@@ -44,6 +44,37 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - uses: Swatinem/rust-cache@v2
+
+    - name: Prepare pdfium build 1
+      run: |
+        mkdir -p pdfium
+        cd pdfium
+        git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+      shell: bash
+
+    - name: Prepare pdfium build 2
+      run: |
+        cd pdfium
+        $env:Path += ';.\depot_tools'
+        $env:DEPOT_TOOLS_WIN_TOOLCHAIN = 0
+        gclient config --unmanaged https://pdfium.googlesource.com/pdfium.git
+        gclient sync --no-history
+        cd pdfium
+        gn gen out/Default
+
+    - name: Prepare pdfium build 3
+      run: |
+        bash assets/build_pdfium_static.sh
+      shell: bash
+
+    - name: Build pdfium
+      run: |
+        $env:Path += ';.\depot_tools'
+        $env:DEPOT_TOOLS_WIN_TOOLCHAIN = 0
+        cd pdfium/pdfium
+        ninja -C out/Default pdfium
+
     - name: Setup toolchain
       run: |
         rustup toolchain install stable-gnu --no-self-update
@@ -53,19 +84,14 @@ jobs:
         rustup toolchain list
         rustup target list
 
-    - uses: Swatinem/rust-cache@v2
-
-    - name: Build pdfium
-      run: bash assets/build_pdfium_static.sh
-      shell: bash
-
     - name: Get base pdf
       run: wget https://www.orimi.com/pdf-test.pdf
       shell: bash
 
     - name: Build and run
       run: |
-        export PDFIUM_STATIC_LIB_PATH="${PWD}/pdfium/out/Default/obj"
+        export PDFIUM_STATIC_LIB_PATH="${PWD}/pdfium/pdfium/out/Default/obj"
+        ls $PDFIUM_STATIC_LIB_PATH/*.lib
         cargo build
         cargo run
       shell: bash
