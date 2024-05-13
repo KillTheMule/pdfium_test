@@ -90,8 +90,10 @@ jobs:
 
     - name: Build and run
       run: |
-        export PDFIUM_STATIC_LIB_PATH="${PWD}/pdfium/pdfium/out/Default/obj"
-        ls $PDFIUM_STATIC_LIB_PATH/*.lib
+        cp pdfium/pdfium/out/Default/obj/pdfium.lib .
+        #export PDFIUM_STATIC_LIB_PATH="${PWD}/pdfium/pdfium/out/Default/obj"
+        ls *.lib
+        export PDFIUM_STATIC_LIB_PATH="."
         cargo build
         cargo run
       shell: bash
