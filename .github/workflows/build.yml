@@ -1,0 +1,77 @@
+name: Release
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: [windows-2019]
+
+    env:
+      LANG: de_DE.UTF-8
+
+    steps:
+
+    - name: Add msys2 to path
+      shell: bash
+      run: |
+        echo "C:\msys64" >> $GITHUB_PATH
+        echo "C:\msys64\usr\bin" >> $GITHUB_PATH
+        echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
+        echo "C:\msys64\mingw64\usr\bin" >> $GITHUB_PATH
+
+
+    - name: Install additional software
+      run: |
+        choco install mingw --version 11.2.0.07112021 --allow-downgrade
+        choco install ninja
+
+        #- name: Check for executable files
+        #  run: |
+        #    echo xxxxxxxxxxxxxxxxxxx
+        #    $Env:Path
+        #    echo xxxxxxxxxxxxxxxxxxx
+        #    Get-ChildItem C:\msys64\mingw64\bin\
+        #    echo xxxxxxxxxxxxxxxxxxx
+        #    (Get-Command aspell).Path
+        #    echo xxxxxxxxxxxxxxxxxxx
+        #    aspell.exe -h
+        #    echo xxxxxxxxxxxxxxxxxxx
+        #    (Get-Command pdftotext.exe).Path
+        #    echo xxxxxxxxxxxxxxxxxxx
+        #    pdftotext.exe -h
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup toolchain
+      run: |
+        rustup toolchain install stable-gnu --no-self-update
+        rustup default stable-gnu
+        cargo --version
+        rustup show
+        rustup toolchain list
+        rustup target list
+
+    - uses: Swatinem/rust-cache@v2
+
+    - name: Build pdfium
+      run: bash assets/build_pdfium_static.sh
+      shell: bash
+
+    - name: Get base pdf
+      run: wget https://www.orimi.com/pdf-test.pdf
+      shell: bash
+
+    - name: Build and run
+      run: |
+        export PDFIUM_STATIC_LIB_PATH="${PWD}/pdfium/out/Default/obj"
+        cargo build
+        cargo run
+      shell: bash
+
+    - name: Upload result
+      uses: actions/upload-artifact@v4
+      with:
+        name: tiletest.pdf
+        path: tiletest.pdf

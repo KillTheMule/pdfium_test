@@ -1,0 +1,8 @@
+[package]
+name = "pdfium_test"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+pdfium-render = { version = "*", features = ["static", "libstdc++"] }
+#/home/pips/Devel/Zeugnisse/pdfium/pdfium/out/Default/obj/libpdfium.a
