@@ -95,6 +95,9 @@ jobs:
 
     - name: Build and run
       run: |
+        echo "xxxxxx"
+        ls pdfium/pdfium/out/Default/obj/
+        echo "xxxxxx"
         cp pdfium/pdfium/out/Default/obj/pdfium.lib .
         #cp lib/pdfium.dll.lib ./pdfium.lib
         #export PDFIUM_STATIC_LIB_PATH="${PWD}/pdfium/pdfium/out/Default/obj"
