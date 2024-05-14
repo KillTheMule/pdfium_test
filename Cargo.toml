@@ -6,3 +6,6 @@ edition = "2021"
 [dependencies]
 pdfium-render = { version = "*", features = ["static", "libstdc++"] }
 #/home/pips/Devel/Zeugnisse/pdfium/pdfium/out/Default/obj/libpdfium.a
+
+[target.'cfg(windows)']
+rustflags = ["-C", "target-feature=+crt-static"]
