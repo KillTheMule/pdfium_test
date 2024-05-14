@@ -77,8 +77,8 @@ jobs:
 
     - name: Setup toolchain
       run: |
-        rustup toolchain install stable-msvc --no-self-update
-        rustup default stable-msvc
+        rustup toolchain install stable-gnu --no-self-update
+        rustup default stable-gnu
         cargo --version
         rustup show
         rustup toolchain list
