@@ -46,39 +46,39 @@ jobs:
 
     - uses: Swatinem/rust-cache@v2
 
-    #- name: Prepare pdfium build 1
-    #  run: |
-    #    mkdir -p pdfium
-    #    cd pdfium
-    #    git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-    #  shell: bash
+    - name: Prepare pdfium build 1
+      run: |
+        mkdir -p pdfium
+        cd pdfium
+        git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+      shell: bash
 
-    #- name: Prepare pdfium build 2
-    #  run: |
-    #    cd pdfium
-    #    $env:Path += ';.\depot_tools'
-    #    $env:DEPOT_TOOLS_WIN_TOOLCHAIN = 0
-    #    gclient config --unmanaged https://pdfium.googlesource.com/pdfium.git
-    #    gclient sync --no-history
-    #    cd pdfium
-    #    gn gen out/Default
+    - name: Prepare pdfium build 2
+      run: |
+        cd pdfium
+        $env:Path += ';.\depot_tools'
+        $env:DEPOT_TOOLS_WIN_TOOLCHAIN = 0
+        gclient config --unmanaged https://pdfium.googlesource.com/pdfium.git
+        gclient sync --no-history
+        cd pdfium
+        gn gen out/Default
 
-    #- name: Prepare pdfium build 3
-    #  run: |
-    #    bash assets/build_pdfium_static.sh
-    #  shell: bash
+    - name: Prepare pdfium build 3
+      run: |
+        bash assets/build_pdfium_static.sh
+      shell: bash
 
-    #- name: Build pdfium
-    #  run: |
-    #    $env:Path += ';.\depot_tools'
-    #    $env:DEPOT_TOOLS_WIN_TOOLCHAIN = 0
-    #    cd pdfium/pdfium
-    #    ninja -C out/Default pdfium
+    - name: Build pdfium
+      run: |
+        $env:Path += ';.\depot_tools'
+        $env:DEPOT_TOOLS_WIN_TOOLCHAIN = 0
+        cd pdfium/pdfium
+        ninja -C out/Default pdfium
 
     - name: Setup toolchain
       run: |
-        rustup toolchain install stable-msvc --no-self-update
-        rustup default stable-msvc
+        rustup toolchain install stable-gnu --no-self-update
+        rustup default stable-gnu
         cargo --version
         rustup show
         rustup toolchain list
