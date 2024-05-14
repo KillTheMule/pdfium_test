@@ -11,19 +11,8 @@ jobs:
       LANG: de_DE.UTF-8
 
     steps:
-
-    - name: Add msys2 to path
-      shell: bash
-      run: |
-        echo "C:\msys64" >> $GITHUB_PATH
-        echo "C:\msys64\usr\bin" >> $GITHUB_PATH
-        echo "C:\msys64\mingw64\bin" >> $GITHUB_PATH
-        echo "C:\msys64\mingw64\usr\bin" >> $GITHUB_PATH
-
-
     - name: Install additional software
       run: |
-        choco install mingw --version 11.2.0.07112021 --allow-downgrade
         choco install ninja
 
         #- name: Check for executable files
@@ -77,12 +66,12 @@ jobs:
 
     - name: Setup toolchain
       run: |
-        rustup toolchain install stable-gnu --no-self-update
-        rustup default stable-gnu
+        #rustup toolchain install stable-gnu --no-self-update
+        # rustup default stable-gnu
         cargo --version
         rustup show
         rustup toolchain list
-        rustup target list
+        #  rustup target list
 
     - name: Get base pdf
       run: wget https://www.orimi.com/pdf-test.pdf
