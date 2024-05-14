@@ -88,14 +88,15 @@ jobs:
       run: wget https://www.orimi.com/pdf-test.pdf
       shell: bash
 
-    - name: Get pdfium static lib
-      run: |
-        wget https://github.com/bblanchon/pdfium-binaries/releases/latest/download/pdfium-win-x86.tgz
-        tar xfvz pdfium-win-x86.tgz
+      #- name: Get pdfium static lib
+      #  run: |
+      #    wget https://github.com/bblanchon/pdfium-binaries/releases/latest/download/pdfium-win-x86.tgz
+      #    tar xfvz pdfium-win-x86.tgz
 
     - name: Build and run
       run: |
-        cp lib/pdfium.dll.lib ./pdfium.lib
+        cp pdfium/pdfium/out/Default/obj/pdfium.lib .
+        #cp lib/pdfium.dll.lib ./pdfium.lib
         #export PDFIUM_STATIC_LIB_PATH="${PWD}/pdfium/pdfium/out/Default/obj"
         file pdfium.lib
         #export PDFIUM_STATIC_LIB_PATH="${PWD}"
