@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-pdfium-render = { version = "*", features = ["static", "libstdc++"] }
+pdfium-render = { version = "*", features = ["static"] }
 #/home/pips/Devel/Zeugnisse/pdfium/pdfium/out/Default/obj/libpdfium.a
 
 #[target.'cfg(windows)']
