@@ -7,5 +7,6 @@ edition = "2021"
 pdfium-render = { version = "*", features = ["static"] }
 #/home/pips/Devel/Zeugnisse/pdfium/pdfium/out/Default/obj/libpdfium.a
 
-#[target.'cfg(windows)']
+[target.'cfg(windows)']
 #rustflags = ["-C", "target-feature=+crt-static"]
+linker = "rust-lld.exe"
