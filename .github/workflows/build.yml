@@ -46,34 +46,34 @@ jobs:
 
     - uses: Swatinem/rust-cache@v2
 
-    - name: Prepare pdfium build 1
-      run: |
-        mkdir -p pdfium
-        cd pdfium
-        git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-      shell: bash
+    #- name: Prepare pdfium build 1
+    #  run: |
+    #    mkdir -p pdfium
+    #    cd pdfium
+    #    git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
+    #  shell: bash
 
-    - name: Prepare pdfium build 2
-      run: |
-        cd pdfium
-        $env:Path += ';.\depot_tools'
-        $env:DEPOT_TOOLS_WIN_TOOLCHAIN = 0
-        gclient config --unmanaged https://pdfium.googlesource.com/pdfium.git
-        gclient sync --no-history
-        cd pdfium
-        gn gen out/Default
+    #- name: Prepare pdfium build 2
+    #  run: |
+    #    cd pdfium
+    #    $env:Path += ';.\depot_tools'
+    #    $env:DEPOT_TOOLS_WIN_TOOLCHAIN = 0
+    #    gclient config --unmanaged https://pdfium.googlesource.com/pdfium.git
+    #    gclient sync --no-history
+    #    cd pdfium
+    #    gn gen out/Default
 
-    - name: Prepare pdfium build 3
-      run: |
-        bash assets/build_pdfium_static.sh
-      shell: bash
+    #- name: Prepare pdfium build 3
+    #  run: |
+    #    bash assets/build_pdfium_static.sh
+    #  shell: bash
 
-    - name: Build pdfium
-      run: |
-        $env:Path += ';.\depot_tools'
-        $env:DEPOT_TOOLS_WIN_TOOLCHAIN = 0
-        cd pdfium/pdfium
-        ninja -C out/Default pdfium
+    #- name: Build pdfium
+    #  run: |
+    #    $env:Path += ';.\depot_tools'
+    #    $env:DEPOT_TOOLS_WIN_TOOLCHAIN = 0
+    #    cd pdfium/pdfium
+    #    ninja -C out/Default pdfium
 
     - name: Setup toolchain
       run: |
@@ -88,12 +88,17 @@ jobs:
       run: wget https://www.orimi.com/pdf-test.pdf
       shell: bash
 
+    - name: Get pdfium static lib
+      run: |
+        wget https://github.com/bblanchon/pdfium-binaries/releases/latest/download/pdfium-win-x86.tgz
+        tar xfvz pdfium-win-x86.tgz
+
     - name: Build and run
       run: |
-        cp pdfium/pdfium/out/Default/obj/pdfium.lib .
+        cp lib/pdfium.dll.lib ./pdfium.lib
         #export PDFIUM_STATIC_LIB_PATH="${PWD}/pdfium/pdfium/out/Default/obj"
         file pdfium.lib
-        #export PDFIUM_STATIC_LIB_PATH="${PWD}"
+        export PDFIUM_STATIC_LIB_PATH="${PWD}"
         cargo build -vv
         cargo run
       shell: bash
